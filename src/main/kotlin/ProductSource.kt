@@ -1,5 +1,6 @@
 package io.github.stscoundrel.caravansary
 
 enum class ProductSource {
-    ASETALO
+    ASETALO,
+    AAWEE
 }

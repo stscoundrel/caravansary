@@ -1,5 +1,6 @@
 package io.github.stscoundrel.caravansary
 
+import io.github.stscoundrel.caravansary.aawee.AaweeScraper
 import io.github.stscoundrel.caravansary.asetalo.AsetaloScraper
 import io.github.stscoundrel.caravansary.database.Database
 import io.github.stscoundrel.caravansary.database.SqliteProductRepository
@@ -8,7 +9,9 @@ fun main() {
     val fetchers = listOf(
         AsetaloScraper("/aseet/kaytetyt-aseet/sotilaskivaarit-tt2/7852/"),
         AsetaloScraper("/aseet/kaytetyt-aseet/kivaarit/49/"),
-        AsetaloScraper("/aseet/kaytetyt-aseet/pistoolit/7850/")
+        AsetaloScraper("/aseet/kaytetyt-aseet/pistoolit/7850/"),
+        AaweeScraper("/kaytetyt-tuotteet/kaytetyt-tuotteet/kaytetyt-aseet/kaytetyt-kivaarit/c/1100101/"),
+        AaweeScraper("/ammunta-ja-aseet/aseet/kivaarit/itselataavat-kivaarit/c/100104/")
     )
 
 
