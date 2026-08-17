@@ -1,6 +1,7 @@
 package io.github.stscoundrel.caravansary.aawee
 
 import com.microsoft.playwright.Browser
+import com.microsoft.playwright.Locator
 import com.microsoft.playwright.Playwright
 import io.github.stscoundrel.caravansary.Product
 import io.github.stscoundrel.caravansary.ProductFetcher
@@ -58,11 +59,45 @@ class AaweeScraper(
                             .locator(".ProductLink h2")
                             .textContent()
                             ?.trim() ?: "",
-                        price = BigDecimal.ZERO, // TODO: price range handle
+                        price = parsePrice(product),
                         date = null
                     )
                 }
             }
+        }
+    }
+
+    private fun parsePrice(product: Locator): BigDecimal {
+        val price = product.locator(".ProductPrice")
+
+        val amount = price
+            .locator(".Price--amount-wrapper")
+            .first()
+            .textContent()
+            ?.trim()
+            ?: throw IllegalArgumentException(
+                "Product price is missing: ${price.textContent()}"
+            )
+
+        return parseAmount(amount)
+    }
+
+    private fun parseAmount(value: String): BigDecimal {
+        val normalized = value
+            .replace("\u00A0", "")
+            .replace(" ", "")
+            .replace("€", "")
+            .replace(",", ".")
+            .trim()
+
+        return try {
+            BigDecimal(normalized)
+        } catch (e: NumberFormatException) {
+            throw IllegalArgumentException(
+                "Unable to parse Aawee product price: '$value' " +
+                        "(normalized: '$normalized')",
+                e
+            )
         }
     }
 }
