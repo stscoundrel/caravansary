@@ -4,6 +4,7 @@ import io.github.stscoundrel.caravansary.aawee.AaweeScraper
 import io.github.stscoundrel.caravansary.asetalo.AsetaloScraper
 import io.github.stscoundrel.caravansary.database.Database
 import io.github.stscoundrel.caravansary.database.SqliteProductRepository
+import io.github.stscoundrel.caravansary.jennynase.JennynAseScraper
 
 fun main() {
     val fetchers = listOf(
@@ -12,7 +13,8 @@ fun main() {
         AsetaloScraper("/aseet/kaytetyt-aseet/pistoolit/7850/"),
         AaweeScraper("/kaytetyt-tuotteet/kaytetyt-tuotteet/kaytetyt-aseet/kaytetyt-kivaarit/c/1100101/"),
         AaweeScraper("/ammunta-ja-aseet/aseet/kivaarit/itselataavat-kivaarit/c/100104/"),
-        AaweeScraper("/ammunta-ja-aseet/aseet/pistoolit-ja-revolverit/itselataavat-pistoolit/c/100401/")
+        AaweeScraper("/ammunta-ja-aseet/aseet/pistoolit-ja-revolverit/itselataavat-pistoolit/c/100401/"),
+        JennynAseScraper("/Tuotteet/"),
     )
 
 
