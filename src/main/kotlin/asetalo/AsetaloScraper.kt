@@ -24,12 +24,8 @@ class AsetaloScraper(override val sourceId: String) : ProductFetcher {
 
                 page.navigate(url)
 
-                println(page.title())
-
                 val products = page.locator(".tuotelistauskortti")
                 val productCount = products.count()
-
-                println("Found $productCount products")
 
                 return (0 until productCount).map { i ->
                     val product = products.nth(i)

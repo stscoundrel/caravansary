@@ -1,7 +1,9 @@
 package io.github.stscoundrel.caravansary
 
-enum class ProductSource {
-    ASETALO,
-    AAWEE,
-    JENNYN_ASE
+enum class ProductSource(
+    val displayName: String
+) {
+    ASETALO("Asetalo"),
+    AAWEE("Aawee"),
+    JENNYN_ASE("Jennyn Ase")
 }

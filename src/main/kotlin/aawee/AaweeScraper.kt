@@ -40,8 +40,6 @@ class AaweeScraper(
                 val products = page.locator(".ProductCard")
                 val productCount = products.count()
 
-                println("Found $productCount products")
-
                 return (0 until productCount).mapNotNull { i ->
                     val product = products.nth(i)
 

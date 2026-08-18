@@ -21,21 +21,11 @@ fun main() {
     Database("data/caravansary.db").use { database ->
         val repository = SqliteProductRepository(database.connection)
         val tracker = ProductTracker(repository)
+        val report = Report()
 
         fetchers.forEach { fetcher ->
             val result = tracker.run(fetcher)
-
-            println("Current: ${result.currentProducts.size}")
-            println("New: ${result.newProducts.size}")
-            println("Sold out: ${result.soldOutProducts.size}")
-
-            result.newProducts.forEach {
-                println("NEW: ${it.name} - ${it.price}")
-            }
-
-            result.soldOutProducts.forEach {
-                println("SOLD OUT: ${it.name} - ${it.price}")
-            }
+            report.print(fetcher, result)
         }
     }
 }

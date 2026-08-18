@@ -28,8 +28,6 @@ class JennynAseScraper(
 
                 val pageUrls = getPageUrls(page)
 
-                println("Found ${pageUrls.size} pages")
-
                 return pageUrls.flatMapIndexed { index, pageUrl ->
                     fetchPage(
                         page = page,
@@ -72,8 +70,6 @@ class JennynAseScraper(
 
         val products = page.locator(".wb-store-item")
         val productCount = products.count()
-
-        println("Page $pageNumber: found $productCount products")
 
         return (0 until productCount).map { i ->
             val product = products.nth(i)
