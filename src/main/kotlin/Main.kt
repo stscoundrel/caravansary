@@ -2,6 +2,7 @@ package io.github.stscoundrel.caravansary
 
 import io.github.stscoundrel.caravansary.aawee.AaweeScraper
 import io.github.stscoundrel.caravansary.asetalo.AsetaloScraper
+import io.github.stscoundrel.caravansary.bestcoast.BestCoastScraper
 import io.github.stscoundrel.caravansary.database.Database
 import io.github.stscoundrel.caravansary.database.SqliteProductRepository
 import io.github.stscoundrel.caravansary.jennynase.JennynAseScraper
@@ -15,6 +16,7 @@ fun main() {
         AaweeScraper("/ammunta-ja-aseet/aseet/kivaarit/itselataavat-kivaarit/c/100104/"),
         AaweeScraper("/ammunta-ja-aseet/aseet/pistoolit-ja-revolverit/itselataavat-pistoolit/c/100401/"),
         JennynAseScraper("/Tuotteet/"),
+        BestCoastScraper("/osasto/kivaarit/")
     )
 
 
