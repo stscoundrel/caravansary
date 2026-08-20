@@ -6,5 +6,6 @@ enum class ProductSource(
     ASETALO("Asetalo"),
     AAWEE("Aawee"),
     JENNYN_ASE("Jennyn Ase"),
-    BEST_COAST("Best Coast")
+    BEST_COAST("Best Coast"),
+    VIRANOMAINEN("Viranomainen")
 }

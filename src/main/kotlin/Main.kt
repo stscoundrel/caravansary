@@ -9,6 +9,7 @@ import io.github.stscoundrel.caravansary.jennynase.JennynAseScraper
 import io.github.stscoundrel.caravansary.report.ConsoleReportRenderer
 import io.github.stscoundrel.caravansary.report.ProductReport
 import io.github.stscoundrel.caravansary.report.ProductStoreReport
+import io.github.stscoundrel.caravansary.viranomainen.ViranomainenScraper
 import java.time.LocalDateTime
 
 fun main() {
@@ -20,7 +21,10 @@ fun main() {
         AaweeScraper("/ammunta-ja-aseet/aseet/kivaarit/itselataavat-kivaarit/c/100104/"),
         AaweeScraper("/ammunta-ja-aseet/aseet/pistoolit-ja-revolverit/itselataavat-pistoolit/c/100401/"),
         JennynAseScraper("/Tuotteet/"),
-        BestCoastScraper("/osasto/kivaarit/")
+        BestCoastScraper("/osasto/kivaarit/"),
+        ViranomainenScraper(
+            "/c9473/daniel-defense-kiväärit?_attribuutti%5Bvarastossa%5D=1"
+        ),
     )
 
 
