@@ -6,6 +6,10 @@ import io.github.stscoundrel.caravansary.bestcoast.BestCoastScraper
 import io.github.stscoundrel.caravansary.database.Database
 import io.github.stscoundrel.caravansary.database.SqliteProductRepository
 import io.github.stscoundrel.caravansary.jennynase.JennynAseScraper
+import io.github.stscoundrel.caravansary.report.ConsoleReportRenderer
+import io.github.stscoundrel.caravansary.report.ProductReport
+import io.github.stscoundrel.caravansary.report.ProductStoreReport
+import java.time.LocalDateTime
 
 fun main() {
     val fetchers = listOf(
@@ -23,11 +27,20 @@ fun main() {
     Database("data/caravansary.db").use { database ->
         val repository = SqliteProductRepository(database.connection)
         val tracker = ProductTracker(repository)
-        val report = Report()
 
-        fetchers.forEach { fetcher ->
-            val result = tracker.run(fetcher)
-            report.print(fetcher, result)
+        val storeReports = fetchers.map { fetcher ->
+            ProductStoreReport(
+                source = fetcher.source,
+                sourceId = fetcher.sourceId,
+                result = tracker.run(fetcher)
+            )
         }
+
+        val report = ProductReport(
+            generatedAt = LocalDateTime.now(),
+            stores = storeReports
+        )
+
+        ConsoleReportRenderer().render(report)
     }
 }
