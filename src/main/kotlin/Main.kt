@@ -6,6 +6,7 @@ import io.github.stscoundrel.caravansary.bestcoast.BestCoastScraper
 import io.github.stscoundrel.caravansary.database.Database
 import io.github.stscoundrel.caravansary.database.SqliteProductRepository
 import io.github.stscoundrel.caravansary.jennynase.JennynAseScraper
+import io.github.stscoundrel.caravansary.laatuase.LaatuaseScraper
 import io.github.stscoundrel.caravansary.report.ConsoleReportRenderer
 import io.github.stscoundrel.caravansary.report.ProductReport
 import io.github.stscoundrel.caravansary.report.ProductStoreReport
@@ -25,6 +26,8 @@ fun main() {
         ViranomainenScraper(
             "/c9473/daniel-defense-kiväärit?_attribuutti%5Bvarastossa%5D=1"
         ),
+        LaatuaseScraper("/osta/aseet/kivaarit/"),
+        LaatuaseScraper("/osta/aseet/sotilaskivaarit/"),
     )
 
 
