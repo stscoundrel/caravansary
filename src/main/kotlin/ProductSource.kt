@@ -8,5 +8,6 @@ enum class ProductSource(
     JENNYN_ASE("Jennyn Ase"),
     BEST_COAST("Best Coast"),
     VIRANOMAINEN("Viranomainen"),
-    LAATUASE("Laatuase")
+    LAATUASE("Laatuase"),
+    FUSIL("Fusil Oy"),
 }
