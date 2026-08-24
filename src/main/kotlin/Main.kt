@@ -4,13 +4,13 @@ import io.github.stscoundrel.caravansary.aawee.AaweeScraper
 import io.github.stscoundrel.caravansary.asetalo.AsetaloScraper
 import io.github.stscoundrel.caravansary.bestcoast.BestCoastScraper
 import io.github.stscoundrel.caravansary.database.Database
+import io.github.stscoundrel.caravansary.database.SqliteProductReportRepository
 import io.github.stscoundrel.caravansary.database.SqliteProductRepository
 import io.github.stscoundrel.caravansary.fusil.FusilScraper
 import io.github.stscoundrel.caravansary.jennynase.JennynAseScraper
 import io.github.stscoundrel.caravansary.laatuase.LaatuaseScraper
 import io.github.stscoundrel.caravansary.report.ConsoleReportRenderer
-import io.github.stscoundrel.caravansary.report.ProductReport
-import io.github.stscoundrel.caravansary.report.ProductStoreReport
+import io.github.stscoundrel.caravansary.report.ProductReportService
 import io.github.stscoundrel.caravansary.viranomainen.ViranomainenScraper
 import java.time.LocalDateTime
 
@@ -29,26 +29,28 @@ fun main() {
         ),
         LaatuaseScraper("/osta/aseet/kivaarit/"),
         LaatuaseScraper("/osta/aseet/sotilaskivaarit/"),
-        FusilScraper("/?category=2")
+        FusilScraper("/?category=2"),
+        FusilScraper("/?category=5")
     )
 
 
     Database("data/caravansary.db").use { database ->
-        val repository = SqliteProductRepository(database.connection)
-        val tracker = ProductTracker(repository)
+        val productRepository =
+            SqliteProductRepository(database.connection)
 
-        val storeReports = fetchers.map { fetcher ->
-            ProductStoreReport(
-                source = fetcher.source,
-                sourceId = fetcher.sourceId,
-                result = tracker.run(fetcher)
-            )
+        val reportRepository =
+            SqliteProductReportRepository(database.connection)
+
+        val tracker = ProductTracker(productRepository)
+        val reportService = ProductReportService()
+
+        val results = fetchers.map { fetcher ->
+            fetcher to tracker.run(fetcher)
         }
 
-        val report = ProductReport(
-            generatedAt = LocalDateTime.now(),
-            stores = storeReports
-        )
+        val report = reportService.create(results)
+
+        reportRepository.save(report)
 
         ConsoleReportRenderer().render(report)
     }

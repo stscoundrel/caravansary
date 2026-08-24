@@ -14,16 +14,15 @@ class ConsoleReportRenderer {
         }
     }
 
-    private fun renderStore(store: ProductStoreReport) {
-        val result = store.result
+    private fun renderStore(result: ProductStoreReport) {
 
         println()
         println("-".repeat(60))
-        println(store.source.displayName)
-        println("  ${store.sourceId}")
+        println(result.source.displayName)
+        println("  ${result.sourceId}")
         println()
 
-        println("  Current:   ${result.currentProducts.size}")
+        println("  Current:   ${result.currentCount}")
         println("  New:       ${result.newProducts.size}")
         println("  Sold out:  ${result.soldOutProducts.size}")
 
