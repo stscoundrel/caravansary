@@ -1,11 +1,11 @@
 package io.github.stscoundrel.caravansary.database
 
 import io.github.stscoundrel.caravansary.Product
+import io.github.stscoundrel.caravansary.ProductReportRepository
 import io.github.stscoundrel.caravansary.ProductSource
 import io.github.stscoundrel.caravansary.ProductStatus
 import io.github.stscoundrel.caravansary.report.ProductReport
 import io.github.stscoundrel.caravansary.report.ProductStoreReport
-import io.github.stscoundrel.caravansary.ProductReportRepository
 import java.sql.Connection
 import java.sql.Statement
 import java.time.LocalDate

@@ -9,10 +9,10 @@ import io.github.stscoundrel.caravansary.database.SqliteProductRepository
 import io.github.stscoundrel.caravansary.fusil.FusilScraper
 import io.github.stscoundrel.caravansary.jennynase.JennynAseScraper
 import io.github.stscoundrel.caravansary.laatuase.LaatuaseScraper
+import io.github.stscoundrel.caravansary.pphunt.PpHuntScraper
 import io.github.stscoundrel.caravansary.report.ConsoleReportRenderer
 import io.github.stscoundrel.caravansary.report.ProductReportService
 import io.github.stscoundrel.caravansary.viranomainen.ViranomainenScraper
-import java.time.LocalDateTime
 
 fun main() {
     val fetchers = listOf(
@@ -30,7 +30,8 @@ fun main() {
         LaatuaseScraper("/osta/aseet/kivaarit/"),
         LaatuaseScraper("/osta/aseet/sotilaskivaarit/"),
         FusilScraper("/?category=2"),
-        FusilScraper("/?category=5")
+        FusilScraper("/?category=5"),
+        PpHuntScraper("/kaytetyt-kivaarit/")
     )
 
 
