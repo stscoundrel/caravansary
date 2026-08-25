@@ -28,8 +28,6 @@ class PpHuntScraper(
                 val products = page.locator("article.item")
                 val productCount = products.count()
 
-                println("Found $productCount products")
-
                 return (0 until productCount).map { i ->
                     val product = products.nth(i)
                     val productLink = product.locator("a").first()

@@ -6,6 +6,7 @@ import io.github.stscoundrel.caravansary.bestcoast.BestCoastScraper
 import io.github.stscoundrel.caravansary.database.Database
 import io.github.stscoundrel.caravansary.database.SqliteProductReportRepository
 import io.github.stscoundrel.caravansary.database.SqliteProductRepository
+import io.github.stscoundrel.caravansary.eratarvike.EratarvikeScraper
 import io.github.stscoundrel.caravansary.fusil.FusilScraper
 import io.github.stscoundrel.caravansary.jennynase.JennynAseScraper
 import io.github.stscoundrel.caravansary.laatuase.LaatuaseScraper
@@ -31,7 +32,8 @@ fun main() {
         LaatuaseScraper("/osta/aseet/sotilaskivaarit/"),
         FusilScraper("/?category=2"),
         FusilScraper("/?category=5"),
-        PpHuntScraper("/kaytetyt-kivaarit/")
+        PpHuntScraper("/kaytetyt-kivaarit/"),
+        EratarvikeScraper("/46-aseet-kaytetyt")
     )
 
 
