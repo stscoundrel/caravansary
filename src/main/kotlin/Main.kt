@@ -6,6 +6,7 @@ import io.github.stscoundrel.caravansary.bestcoast.BestCoastScraper
 import io.github.stscoundrel.caravansary.database.Database
 import io.github.stscoundrel.caravansary.database.SqliteProductReportRepository
 import io.github.stscoundrel.caravansary.database.SqliteProductRepository
+import io.github.stscoundrel.caravansary.erakala.ErakalaScraper
 import io.github.stscoundrel.caravansary.eratarvike.EratarvikeScraper
 import io.github.stscoundrel.caravansary.fusil.FusilScraper
 import io.github.stscoundrel.caravansary.ironpoint.IronPointScraper
@@ -35,7 +36,13 @@ fun main() {
         FusilScraper("/?category=5"),
         PpHuntScraper("/kaytetyt-kivaarit/"),
         EratarvikeScraper("/46-aseet-kaytetyt"),
-        IronPointScraper("/kytetyt-aseet-c-53.html")
+        IronPointScraper("/kytetyt-aseet-c-53.html"),
+        ErakalaScraper(
+            "/asekauppa-ja-ampumaurheilu/kaytetyt-aseet/kaytetyt-kivaarit/c/201050/"
+        ),
+        ErakalaScraper(
+            "/asekauppa-ja-ampumaurheilu/kaytetyt-aseet/kaytetyt-pistoolit/c/201060/"
+        )
     )
 
 

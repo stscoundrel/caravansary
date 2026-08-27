@@ -12,5 +12,6 @@ enum class ProductSource(
     FUSIL("Fusil Oy"),
     PP_HUNT("PP Hunt"),
     ERATARVIKE("Erätarvike"),
-    IRON_POINT("Iron Point Finland")
+    IRON_POINT("Iron Point Finland"),
+    ERAKALA("Eräkala"),
 }
