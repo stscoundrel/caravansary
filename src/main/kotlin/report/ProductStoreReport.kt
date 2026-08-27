@@ -1,7 +1,7 @@
 package io.github.stscoundrel.caravansary.report
 
-import io.github.stscoundrel.caravansary.Product
-import io.github.stscoundrel.caravansary.ProductSource
+import io.github.stscoundrel.caravansary.domain.Product
+import io.github.stscoundrel.caravansary.domain.ProductSource
 
 data class ProductStoreReport(
     val source: ProductSource,

@@ -1,7 +1,7 @@
 package io.github.stscoundrel.caravansary.report
 
-import io.github.stscoundrel.caravansary.ProductFetcher
-import io.github.stscoundrel.caravansary.ProductTrackingResult
+import io.github.stscoundrel.caravansary.domain.ProductFetcher
+import io.github.stscoundrel.caravansary.domain.ProductTrackingResult
 import java.time.LocalDateTime
 
 class ProductReportService {

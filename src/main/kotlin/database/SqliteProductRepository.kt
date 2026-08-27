@@ -1,9 +1,9 @@
 package io.github.stscoundrel.caravansary.database
 
-import io.github.stscoundrel.caravansary.Product
-import io.github.stscoundrel.caravansary.ProductRepository
-import io.github.stscoundrel.caravansary.ProductSource
-import io.github.stscoundrel.caravansary.ProductStatus
+import io.github.stscoundrel.caravansary.domain.Product
+import io.github.stscoundrel.caravansary.domain.ProductRepository
+import io.github.stscoundrel.caravansary.domain.ProductSource
+import io.github.stscoundrel.caravansary.domain.ProductStatus
 import java.sql.Connection
 import java.time.Instant
 import java.time.LocalDate

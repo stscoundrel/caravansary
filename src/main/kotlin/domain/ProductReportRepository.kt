@@ -1,4 +1,4 @@
-package io.github.stscoundrel.caravansary
+package io.github.stscoundrel.caravansary.domain
 
 import io.github.stscoundrel.caravansary.report.ProductReport
 

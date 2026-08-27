@@ -1,4 +1,4 @@
-package io.github.stscoundrel.caravansary
+package io.github.stscoundrel.caravansary.domain
 
 import java.math.BigDecimal
 import java.time.Instant

@@ -1,9 +1,9 @@
 package io.github.stscoundrel.caravansary.pphunt
 
 import com.microsoft.playwright.Playwright
-import io.github.stscoundrel.caravansary.Product
-import io.github.stscoundrel.caravansary.ProductFetcher
-import io.github.stscoundrel.caravansary.ProductSource
+import io.github.stscoundrel.caravansary.domain.Product
+import io.github.stscoundrel.caravansary.domain.ProductFetcher
+import io.github.stscoundrel.caravansary.domain.ProductSource
 import java.math.BigDecimal
 
 class PpHuntScraper(

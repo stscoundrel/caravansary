@@ -1,4 +1,4 @@
-package io.github.stscoundrel.caravansary
+package io.github.stscoundrel.caravansary.domain
 
 interface ProductFetcher {
     val source: ProductSource

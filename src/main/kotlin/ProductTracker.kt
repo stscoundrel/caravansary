@@ -1,5 +1,10 @@
 package io.github.stscoundrel.caravansary
 
+import io.github.stscoundrel.caravansary.domain.ProductFetcher
+import io.github.stscoundrel.caravansary.domain.ProductRepository
+import io.github.stscoundrel.caravansary.domain.ProductStatus
+import io.github.stscoundrel.caravansary.domain.ProductTrackingResult
+
 class ProductTracker(
     private val repository: ProductRepository
 ) {
