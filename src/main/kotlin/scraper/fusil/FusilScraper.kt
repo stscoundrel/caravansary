@@ -1,4 +1,4 @@
-package io.github.stscoundrel.caravansary.fusil
+package io.github.stscoundrel.caravansary.scraper.fusil
 
 import com.microsoft.playwright.Locator
 import com.microsoft.playwright.Page

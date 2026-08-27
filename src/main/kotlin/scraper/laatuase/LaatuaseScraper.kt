@@ -1,6 +1,5 @@
-package io.github.stscoundrel.caravansary.bestcoast
+package io.github.stscoundrel.caravansary.scraper.laatuase
 
-import com.microsoft.playwright.Locator
 import com.microsoft.playwright.Page
 import com.microsoft.playwright.Playwright
 import io.github.stscoundrel.caravansary.domain.Product
@@ -8,15 +7,15 @@ import io.github.stscoundrel.caravansary.domain.ProductFetcher
 import io.github.stscoundrel.caravansary.domain.ProductSource
 import java.math.BigDecimal
 
-class BestCoastScraper(
+class LaatuaseScraper(
     override val sourceId: String
 ) : ProductFetcher {
 
     companion object {
-        private const val BASE_URL = "https://bestcoast.fi"
+        private const val BASE_URL = "https://laatuase.fi"
     }
 
-    override val source = ProductSource.BEST_COAST
+    override val source = ProductSource.LAATUASE
 
     override fun fetchProducts(): List<Product> {
         val url = "$BASE_URL$sourceId"
@@ -41,20 +40,25 @@ class BestCoastScraper(
     }
 
     private fun getPageUrls(page: Page): List<String> {
-        val pagination = page.locator(".elementor-pagination")
+        val pagination = page.locator(".woocommerce-pagination")
+
+        if (pagination.count() == 0) {
+            return listOf(page.url())
+        }
+
         val links = pagination.locator("a.page-numbers")
 
-        return (0 until links.count())
-            .mapNotNull { i ->
-                links.nth(i).getAttribute("href")
+        return buildList {
+            add(page.url())
+
+            for (i in 0 until links.count()) {
+                val href = links.nth(i).getAttribute("href")
+
+                if (!href.isNullOrBlank()) {
+                    add(href)
+                }
             }
-            .filter { it.isNotBlank() }
-            .distinct()
-            .toMutableList()
-            .apply {
-                add(0, page.url())
-            }
-            .distinct()
+        }.distinct()
     }
 
     private fun fetchPage(
@@ -64,14 +68,14 @@ class BestCoastScraper(
     ): List<Product> {
         page.navigate(pageUrl)
 
-        val products = page.locator(".e-loop-item.product")
+        val products = page.locator(".product")
         val productCount = products.count()
 
         return (0 until productCount).map { i ->
             val product = products.nth(i)
 
             Product(
-                source = ProductSource.BEST_COAST,
+                source = ProductSource.LAATUASE,
                 sourceId = sourceId,
                 id = product
                     .locator("a")
@@ -79,7 +83,7 @@ class BestCoastScraper(
                     .getAttribute("href")
                     ?: "",
                 name = product
-                    .locator(".product_title")
+                    .locator(".woocommerce-loop-product__title")
                     .first()
                     .textContent()
                     ?.trim() ?: "",
@@ -89,19 +93,14 @@ class BestCoastScraper(
         }
     }
 
-    private fun parsePrice(product: Locator): BigDecimal {
-        val price = product.locator(".woocommerce-Price-amount")
-
-        if (price.count() == 0) {
-            return BigDecimal.ZERO
-        }
-
-        val value = price
+    private fun parsePrice(product: com.microsoft.playwright.Locator): BigDecimal {
+        val value = product
+            .locator(".woocommerce-Price-amount")
             .first()
             .textContent()
 
-        if (value.isNullOrBlank()) {
-            return BigDecimal.ZERO
+        require(!value.isNullOrBlank()) {
+            "Product price is missing"
         }
 
         val normalized = value
@@ -115,7 +114,7 @@ class BestCoastScraper(
             BigDecimal(normalized)
         } catch (e: NumberFormatException) {
             throw IllegalArgumentException(
-                "Unable to parse Best Coast product price: " +
+                "Unable to parse Laatuase product price: " +
                         "'$value' (normalized: '$normalized')",
                 e
             )

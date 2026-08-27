@@ -1,4 +1,4 @@
-package io.github.stscoundrel.caravansary.jennynase
+package io.github.stscoundrel.caravansary.scraper.eratarvike
 
 import com.microsoft.playwright.Page
 import com.microsoft.playwright.Playwright
@@ -7,15 +7,15 @@ import io.github.stscoundrel.caravansary.domain.ProductFetcher
 import io.github.stscoundrel.caravansary.domain.ProductSource
 import java.math.BigDecimal
 
-class JennynAseScraper(
+class EratarvikeScraper(
     override val sourceId: String
 ) : ProductFetcher {
 
     companion object {
-        private const val BASE_URL = "https://www.jennynase.fi"
+        private const val BASE_URL = "https://www.eratarvike.fi/fi"
     }
 
-    override val source = ProductSource.JENNYN_ASE
+    override val source = ProductSource.ERATARVIKE
 
     override fun fetchProducts(): List<Product> {
         val url = "$BASE_URL$sourceId"
@@ -28,63 +28,54 @@ class JennynAseScraper(
 
                 val pageUrls = getPageUrls(page)
 
-                return pageUrls.flatMapIndexed { index, pageUrl ->
-                    fetchPage(
-                        page = page,
-                        pageUrl = pageUrl,
-                        pageNumber = index + 1
-                    )
+                return pageUrls.flatMap { pageUrl ->
+                    scrapePage(page, pageUrl)
                 }
             }
         }
     }
 
     private fun getPageUrls(page: Page): List<String> {
-        val pagination = page.locator(".pagination")
-        val links = pagination.locator("a")
+        val links = page.locator(
+            ".pagination-list-container a.page-link"
+        )
 
-        return (0 until links.count())
+        val linkCount = links.count()
+
+        if (linkCount == 0) {
+            return listOf(page.url())
+        }
+
+        return (0 until linkCount)
             .mapNotNull { i ->
                 links.nth(i).getAttribute("href")
-            }
-            .filter { href ->
-                href.isNotBlank() &&
-                        !href.startsWith("javascript:")
-            }
-            .map { href ->
-                if (href.startsWith("http")) {
-                    href
-                } else {
-                    "$BASE_URL$href"
-                }
             }
             .distinct()
     }
 
-    private fun fetchPage(
+    private fun scrapePage(
         page: Page,
-        pageUrl: String,
-        pageNumber: Int
+        url: String
     ): List<Product> {
-        page.navigate(pageUrl)
+        page.navigate(url)
 
-        val products = page.locator(".wb-store-item")
+        val products = page.locator("article.product-miniature")
         val productCount = products.count()
 
         return (0 until productCount).map { i ->
             val product = products.nth(i)
 
             Product(
-                source = ProductSource.JENNYN_ASE,
+                source = ProductSource.ERATARVIKE,
                 sourceId = sourceId,
-                id = product.getAttribute("data-item-id") ?: "",
+                id = product.getAttribute("data-id-product") ?: "",
                 name = product
-                    .locator(".wb-store-name")
+                    .locator(".product-miniature__title")
                     .textContent()
                     ?.trim() ?: "",
                 price = parsePrice(
                     product
-                        .locator(".wb-store-price")
+                        .locator(".product-miniature__price")
                         .textContent()
                 ),
                 date = null
@@ -108,8 +99,8 @@ class JennynAseScraper(
             BigDecimal(normalized)
         } catch (e: NumberFormatException) {
             throw IllegalArgumentException(
-                "Unable to parse Jennyn Ase product price: " +
-                        "'$value' (normalized: '$normalized')",
+                "Unable to parse Erätarvike product price: '$value' " +
+                        "(normalized: '$normalized')",
                 e
             )
         }

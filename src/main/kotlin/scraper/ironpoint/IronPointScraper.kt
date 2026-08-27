@@ -1,5 +1,6 @@
-package io.github.stscoundrel.caravansary.eratarvike
+package io.github.stscoundrel.caravansary.scraper.ironpoint
 
+import com.microsoft.playwright.Locator
 import com.microsoft.playwright.Page
 import com.microsoft.playwright.Playwright
 import io.github.stscoundrel.caravansary.domain.Product
@@ -7,15 +8,15 @@ import io.github.stscoundrel.caravansary.domain.ProductFetcher
 import io.github.stscoundrel.caravansary.domain.ProductSource
 import java.math.BigDecimal
 
-class EratarvikeScraper(
+class IronPointScraper(
     override val sourceId: String
 ) : ProductFetcher {
 
     companion object {
-        private const val BASE_URL = "https://www.eratarvike.fi/fi"
+        private const val BASE_URL = "https://www.ironpoint.fi/fi"
     }
 
-    override val source = ProductSource.ERATARVIKE
+    override val source = ProductSource.IRON_POINT
 
     override fun fetchProducts(): List<Product> {
         val url = "$BASE_URL$sourceId"
@@ -36,10 +37,7 @@ class EratarvikeScraper(
     }
 
     private fun getPageUrls(page: Page): List<String> {
-        val links = page.locator(
-            ".pagination-list-container a.page-link"
-        )
-
+        val links = page.locator(".pagination a")
         val linkCount = links.count()
 
         if (linkCount == 0) {
@@ -50,6 +48,7 @@ class EratarvikeScraper(
             .mapNotNull { i ->
                 links.nth(i).getAttribute("href")
             }
+            .filter { it.startsWith("http") }
             .distinct()
     }
 
@@ -59,33 +58,40 @@ class EratarvikeScraper(
     ): List<Product> {
         page.navigate(url)
 
-        val products = page.locator("article.product-miniature")
+        val products = page.locator(".product-small")
         val productCount = products.count()
 
         return (0 until productCount).map { i ->
             val product = products.nth(i)
 
+            val productLink = product
+                .locator(".caption a")
+                .first()
+
             Product(
-                source = ProductSource.ERATARVIKE,
+                source = ProductSource.IRON_POINT,
                 sourceId = sourceId,
-                id = product.getAttribute("data-id-product") ?: "",
-                name = product
-                    .locator(".product-miniature__title")
+                id = productLink.getAttribute("href") ?: "",
+                name = productLink
                     .textContent()
                     ?.trim() ?: "",
-                price = parsePrice(
-                    product
-                        .locator(".product-miniature__price")
-                        .textContent()
-                ),
+                price = parsePrice(product),
                 date = null
             )
         }
     }
 
-    private fun parsePrice(value: String?): BigDecimal {
-        require(!value.isNullOrBlank()) {
-            "Product price is missing"
+    private fun parsePrice(product: Locator): BigDecimal {
+        val price = product.locator(".price")
+
+        if (price.count() == 0) {
+            return BigDecimal.ZERO
+        }
+
+        val value = price.textContent()
+
+        if (value.isNullOrBlank()) {
+            return BigDecimal.ZERO
         }
 
         val normalized = value
@@ -99,7 +105,7 @@ class EratarvikeScraper(
             BigDecimal(normalized)
         } catch (e: NumberFormatException) {
             throw IllegalArgumentException(
-                "Unable to parse Erätarvike product price: '$value' " +
+                "Unable to parse Iron Point product price: '$value' " +
                         "(normalized: '$normalized')",
                 e
             )

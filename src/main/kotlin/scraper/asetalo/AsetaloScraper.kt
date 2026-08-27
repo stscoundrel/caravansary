@@ -1,20 +1,19 @@
-package io.github.stscoundrel.caravansary.pphunt
+package io.github.stscoundrel.caravansary.scraper.asetalo
 
 import com.microsoft.playwright.Playwright
+
 import io.github.stscoundrel.caravansary.domain.Product
 import io.github.stscoundrel.caravansary.domain.ProductFetcher
 import io.github.stscoundrel.caravansary.domain.ProductSource
 import java.math.BigDecimal
+import java.time.LocalDate
 
-class PpHuntScraper(
-    override val sourceId: String
-) : ProductFetcher {
+class AsetaloScraper(override val sourceId: String) : ProductFetcher {
+    override val source = ProductSource.ASETALO
 
     companion object {
-        private const val BASE_URL = "https://www.pphunt.fi"
+        private const val BASE_URL = "https://asetalo.fi"
     }
-
-    override val source = ProductSource.PP_HUNT
 
     override fun fetchProducts(): List<Product> {
         val url = "$BASE_URL$sourceId"
@@ -25,27 +24,29 @@ class PpHuntScraper(
 
                 page.navigate(url)
 
-                val products = page.locator("article.item")
+                val products = page.locator(".tuotelistauskortti")
                 val productCount = products.count()
 
                 return (0 until productCount).map { i ->
                     val product = products.nth(i)
-                    val productLink = product.locator("a").first()
 
                     Product(
-                        source = ProductSource.PP_HUNT,
+                        source = ProductSource.ASETALO,
                         sourceId = sourceId,
-                        id = productLink.getAttribute("href") ?: "",
+                        id = product.getAttribute("id") ?: "",
                         name = product
-                            .locator(".item-title")
+                            .locator(".selaus_tuotenimi_iso")
                             .textContent()
                             ?.trim() ?: "",
                         price = parsePrice(
                             product
-                                .locator(".item-price .wnd-product-price")
+                                .locator(".selaus_tuotehinta")
                                 .textContent()
                         ),
-                        date = null
+                        date = product
+                            .getAttribute("data-e")
+                            ?.takeIf { it.isNotBlank() }
+                            ?.let { LocalDate.parse(it) }
                     )
                 }
             }
@@ -60,6 +61,7 @@ class PpHuntScraper(
         val normalized = value
             .replace("\u00A0", "")
             .replace(" ", "")
+            .replace("€", "")
             .replace(",", ".")
             .trim()
 
@@ -67,8 +69,7 @@ class PpHuntScraper(
             BigDecimal(normalized)
         } catch (e: NumberFormatException) {
             throw IllegalArgumentException(
-                "Unable to parse PP Hunt product price: '$value' " +
-                        "(normalized: '$normalized')",
+                "Unable to parse product price: '$value' (normalized: '$normalized')",
                 e
             )
         }

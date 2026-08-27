@@ -1,21 +1,22 @@
-package io.github.stscoundrel.caravansary.erakala
+package io.github.stscoundrel.caravansary.scraper.aawee
 
 import com.microsoft.playwright.Browser
+import com.microsoft.playwright.Locator
 import com.microsoft.playwright.Playwright
 import io.github.stscoundrel.caravansary.domain.Product
 import io.github.stscoundrel.caravansary.domain.ProductFetcher
 import io.github.stscoundrel.caravansary.domain.ProductSource
 import java.math.BigDecimal
 
-class ErakalaScraper(
+class AaweeScraper(
     override val sourceId: String
 ) : ProductFetcher {
 
     companion object {
-        private const val BASE_URL = "https://www.erakala.fi"
+        private const val BASE_URL = "https://www.aawee.fi/fi"
     }
 
-    override val source = ProductSource.ERAKALA
+    override val source = ProductSource.AAWEE
 
     override fun fetchProducts(): List<Product> {
         val url = "$BASE_URL$sourceId"
@@ -39,19 +40,19 @@ class ErakalaScraper(
                 val products = page.locator(".ProductCard")
                 val productCount = products.count()
 
-                return (0 until productCount).map { i ->
+                return (0 until productCount).mapNotNull { i ->
                     val product = products.nth(i)
 
-                    val productLink = product
-                        .locator(".ProductLink")
-                        .first()
+                    if (product.textContent()?.contains("Tuote tilapäisesti loppu") == true) {
+                        return@mapNotNull null
+                    }
+
+                    val productLink = product.locator(".ProductLink").first()
 
                     Product(
-                        source = ProductSource.ERAKALA,
+                        source = ProductSource.AAWEE,
                         sourceId = sourceId,
-                        id = productLink
-                            .getAttribute("href")
-                            ?: "",
+                        id = productLink.getAttribute("href") ?: "",
                         name = product
                             .locator(".ProductLink h2")
                             .textContent()
@@ -64,17 +65,22 @@ class ErakalaScraper(
         }
     }
 
-    private fun parsePrice(product: com.microsoft.playwright.Locator): BigDecimal {
-        val price = product.locator(
-            ".Price--amount-wrapper"
-        ).first()
+    private fun parsePrice(product: Locator): BigDecimal {
+        val price = product.locator(".ProductPrice")
 
-        val value = price.textContent()
+        val amount = price
+            .locator(".Price--amount-wrapper")
+            .first()
+            .textContent()
+            ?.trim()
+            ?: throw IllegalArgumentException(
+                "Product price is missing: ${price.textContent()}"
+            )
 
-        require(!value.isNullOrBlank()) {
-            "Product price is missing"
-        }
+        return parseAmount(amount)
+    }
 
+    private fun parseAmount(value: String): BigDecimal {
         val normalized = value
             .replace("\u00A0", "")
             .replace(" ", "")
@@ -86,7 +92,7 @@ class ErakalaScraper(
             BigDecimal(normalized)
         } catch (e: NumberFormatException) {
             throw IllegalArgumentException(
-                "Unable to parse Eräkala product price: '$value' " +
+                "Unable to parse Aawee product price: '$value' " +
                         "(normalized: '$normalized')",
                 e
             )

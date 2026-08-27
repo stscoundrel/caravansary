@@ -1,21 +1,20 @@
-package io.github.stscoundrel.caravansary.viranomainen
+package io.github.stscoundrel.caravansary.scraper.pphunt
 
-import com.microsoft.playwright.Locator
 import com.microsoft.playwright.Playwright
 import io.github.stscoundrel.caravansary.domain.Product
 import io.github.stscoundrel.caravansary.domain.ProductFetcher
 import io.github.stscoundrel.caravansary.domain.ProductSource
 import java.math.BigDecimal
 
-class ViranomainenScraper(
+class PpHuntScraper(
     override val sourceId: String
 ) : ProductFetcher {
 
     companion object {
-        private const val BASE_URL = "https://viranomainen.fi"
+        private const val BASE_URL = "https://www.pphunt.fi"
     }
 
-    override val source = ProductSource.VIRANOMAINEN
+    override val source = ProductSource.PP_HUNT
 
     override fun fetchProducts(): List<Product> {
         val url = "$BASE_URL$sourceId"
@@ -26,24 +25,26 @@ class ViranomainenScraper(
 
                 page.navigate(url)
 
-                val products = page.locator(
-                    "#tuotelistaus_div a.ajaxlinkki.item"
-                )
-
+                val products = page.locator("article.item")
                 val productCount = products.count()
 
                 return (0 until productCount).map { i ->
                     val product = products.nth(i)
+                    val productLink = product.locator("a").first()
 
                     Product(
-                        source = ProductSource.VIRANOMAINEN,
+                        source = ProductSource.PP_HUNT,
                         sourceId = sourceId,
-                        id = product.getAttribute("href") ?: "",
+                        id = productLink.getAttribute("href") ?: "",
                         name = product
-                            .locator(".item_name")
+                            .locator(".item-title")
                             .textContent()
                             ?.trim() ?: "",
-                        price = parsePrice(product),
+                        price = parsePrice(
+                            product
+                                .locator(".item-price .wnd-product-price")
+                                .textContent()
+                        ),
                         date = null
                     )
                 }
@@ -51,15 +52,7 @@ class ViranomainenScraper(
         }
     }
 
-    private fun parsePrice(product: Locator): BigDecimal {
-        val priceElement = product.locator(
-            "div[style*='color:black'] > div"
-        ).first()
-
-        val value = priceElement.evaluate(
-            """element => element.childNodes[0].textContent"""
-        ) as String?
-
+    private fun parsePrice(value: String?): BigDecimal {
         require(!value.isNullOrBlank()) {
             "Product price is missing"
         }
@@ -67,7 +60,6 @@ class ViranomainenScraper(
         val normalized = value
             .replace("\u00A0", "")
             .replace(" ", "")
-            .replace("€", "")
             .replace(",", ".")
             .trim()
 
@@ -75,8 +67,8 @@ class ViranomainenScraper(
             BigDecimal(normalized)
         } catch (e: NumberFormatException) {
             throw IllegalArgumentException(
-                "Unable to parse Viranomainen product price: " +
-                        "'$value' (normalized: '$normalized')",
+                "Unable to parse PP Hunt product price: '$value' " +
+                        "(normalized: '$normalized')",
                 e
             )
         }

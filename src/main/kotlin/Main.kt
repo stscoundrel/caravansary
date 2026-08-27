@@ -1,21 +1,21 @@
 package io.github.stscoundrel.caravansary
 
-import io.github.stscoundrel.caravansary.aawee.AaweeScraper
-import io.github.stscoundrel.caravansary.asetalo.AsetaloScraper
-import io.github.stscoundrel.caravansary.bestcoast.BestCoastScraper
 import io.github.stscoundrel.caravansary.database.Database
 import io.github.stscoundrel.caravansary.database.SqliteProductReportRepository
 import io.github.stscoundrel.caravansary.database.SqliteProductRepository
-import io.github.stscoundrel.caravansary.erakala.ErakalaScraper
-import io.github.stscoundrel.caravansary.eratarvike.EratarvikeScraper
-import io.github.stscoundrel.caravansary.fusil.FusilScraper
-import io.github.stscoundrel.caravansary.ironpoint.IronPointScraper
-import io.github.stscoundrel.caravansary.jennynase.JennynAseScraper
-import io.github.stscoundrel.caravansary.laatuase.LaatuaseScraper
-import io.github.stscoundrel.caravansary.pphunt.PpHuntScraper
 import io.github.stscoundrel.caravansary.report.ConsoleReportRenderer
 import io.github.stscoundrel.caravansary.report.ProductReportService
-import io.github.stscoundrel.caravansary.viranomainen.ViranomainenScraper
+import io.github.stscoundrel.caravansary.scraper.aawee.AaweeScraper
+import io.github.stscoundrel.caravansary.scraper.asetalo.AsetaloScraper
+import io.github.stscoundrel.caravansary.scraper.bestcoast.BestCoastScraper
+import io.github.stscoundrel.caravansary.scraper.erakala.ErakalaScraper
+import io.github.stscoundrel.caravansary.scraper.eratarvike.EratarvikeScraper
+import io.github.stscoundrel.caravansary.scraper.fusil.FusilScraper
+import io.github.stscoundrel.caravansary.scraper.ironpoint.IronPointScraper
+import io.github.stscoundrel.caravansary.scraper.jennynase.JennynAseScraper
+import io.github.stscoundrel.caravansary.scraper.laatuase.LaatuaseScraper
+import io.github.stscoundrel.caravansary.scraper.pphunt.PpHuntScraper
+import io.github.stscoundrel.caravansary.scraper.viranomainen.ViranomainenScraper
 
 fun main() {
     val fetchers = listOf(
