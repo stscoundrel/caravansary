@@ -16,6 +16,7 @@ import io.github.stscoundrel.caravansary.scraper.fusil.FusilScraper
 import io.github.stscoundrel.caravansary.scraper.ironpoint.IronPointScraper
 import io.github.stscoundrel.caravansary.scraper.jennynase.JennynAseScraper
 import io.github.stscoundrel.caravansary.scraper.laatuase.LaatuaseScraper
+import io.github.stscoundrel.caravansary.scraper.oulunase.OulunAseScraper
 import io.github.stscoundrel.caravansary.scraper.pphunt.PpHuntScraper
 import io.github.stscoundrel.caravansary.scraper.viranomainen.ViranomainenScraper
 
@@ -44,7 +45,10 @@ fun main() {
         ),
         ErakalaScraper(
             "/asekauppa-ja-ampumaurheilu/kaytetyt-aseet/kaytetyt-pistoolit/c/201060/"
-        )
+        ),
+        OulunAseScraper(
+            "/category/30/haulikot-puoliautomaatti?sort=search&per_page=100"
+        ),
     )
 
 
