@@ -1,5 +1,7 @@
 package io.github.stscoundrel.caravansary
 
+import io.github.stscoundrel.caravansary.application.CaravansaryService
+import io.github.stscoundrel.caravansary.application.ProductTracker
 import io.github.stscoundrel.caravansary.database.Database
 import io.github.stscoundrel.caravansary.database.SqliteProductReportRepository
 import io.github.stscoundrel.caravansary.database.SqliteProductRepository
@@ -53,16 +55,14 @@ fun main() {
         val reportRepository =
             SqliteProductReportRepository(database.connection)
 
-        val tracker = ProductTracker(productRepository)
-        val reportService = ProductReportService()
+        val service = CaravansaryService(
+            fetchers = fetchers,
+            tracker = ProductTracker(productRepository),
+            reportService = ProductReportService(),
+            reportRepository = reportRepository
+        )
 
-        val results = fetchers.map { fetcher ->
-            fetcher to tracker.run(fetcher)
-        }
-
-        val report = reportService.create(results)
-
-        reportRepository.save(report)
+        val report = service.run()
 
         ConsoleReportRenderer().render(report)
     }
