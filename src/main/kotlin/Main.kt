@@ -8,6 +8,7 @@ import io.github.stscoundrel.caravansary.database.SqliteProductRepository
 import io.github.stscoundrel.caravansary.report.ConsoleReportRenderer
 import io.github.stscoundrel.caravansary.report.ProductReportService
 import io.github.stscoundrel.caravansary.scraper.aawee.AaweeScraper
+import io.github.stscoundrel.caravansary.scraper.asenurkka.AsenurkkaScraper
 import io.github.stscoundrel.caravansary.scraper.asetalo.AsetaloScraper
 import io.github.stscoundrel.caravansary.scraper.bestcoast.BestCoastScraper
 import io.github.stscoundrel.caravansary.scraper.erakala.ErakalaScraper
@@ -48,6 +49,9 @@ fun main() {
         ),
         OulunAseScraper(
             "/category/30/haulikot-puoliautomaatti?sort=search&per_page=100"
+        ),
+        AsenurkkaScraper(
+            "/tuote-osasto/kaikkituotteet/aseet/kaytetyt-aseet/"
         ),
     )
 

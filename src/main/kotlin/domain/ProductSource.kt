@@ -15,4 +15,5 @@ enum class ProductSource(
     IRON_POINT("Iron Point Finland"),
     ERAKALA("Eräkala"),
     OULUN_ASE("Oulun ase"),
+    ASENURKKA("Asenurkka"),
 }
