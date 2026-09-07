@@ -26,11 +26,13 @@ fun main() {
         AsetaloScraper("/aseet/kaytetyt-aseet/sotilaskivaarit-tt2/7852/"),
         AsetaloScraper("/aseet/kaytetyt-aseet/kivaarit/49/"),
         AsetaloScraper("/aseet/kaytetyt-aseet/pistoolit/7850/"),
+        AsetaloScraper("/aseet/kaytetyt-aseet/haulikot/47/"),
         AaweeScraper("/kaytetyt-tuotteet/kaytetyt-tuotteet/kaytetyt-aseet/kaytetyt-kivaarit/c/1100101/"),
         AaweeScraper("/ammunta-ja-aseet/aseet/kivaarit/itselataavat-kivaarit/c/100104/"),
         AaweeScraper("/ammunta-ja-aseet/aseet/pistoolit-ja-revolverit/itselataavat-pistoolit/c/100401/"),
         JennynAseScraper("/Tuotteet/"),
         BestCoastScraper("/osasto/kivaarit/"),
+        BestCoastScraper("/osasto/haulikot/"),
         ViranomainenScraper(
             "/c9473/daniel-defense-kiväärit?_attribuutti%5Bvarastossa%5D=1"
         ),
@@ -46,6 +48,9 @@ fun main() {
         ),
         ErakalaScraper(
             "/asekauppa-ja-ampumaurheilu/kaytetyt-aseet/kaytetyt-pistoolit/c/201060/"
+        ),
+        ErakalaScraper(
+            "/asekauppa-ja-ampumaurheilu/kaytetyt-aseet/kaytetyt-haulikot/c/201040/"
         ),
         OulunAseScraper(
             "/category/30/haulikot-puoliautomaatti?sort=search&per_page=100"
