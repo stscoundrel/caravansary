@@ -6,6 +6,7 @@ import com.microsoft.playwright.Playwright
 import io.github.stscoundrel.caravansary.domain.Product
 import io.github.stscoundrel.caravansary.domain.ProductFetcher
 import io.github.stscoundrel.caravansary.domain.ProductSource
+import io.github.stscoundrel.caravansary.scraper.newScraperContext
 import java.math.BigDecimal
 import java.time.LocalDate
 
@@ -24,7 +25,8 @@ class FusilScraper(
 
         Playwright.create().use { playwright ->
             playwright.chromium().launch().use { browser ->
-                val page = browser.newPage()
+                val context = browser.newScraperContext()
+                val page = context.newPage()
 
                 page.navigate(url)
 
