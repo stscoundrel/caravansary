@@ -8,7 +8,7 @@ import io.github.stscoundrel.caravansary.report.ProductReportService
 import java.math.BigDecimal
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 class CaravansaryServiceTest {
     @Test
@@ -60,7 +60,12 @@ class CaravansaryServiceTest {
         assertEquals(listOf("before", "after"), report.stores.map { it.sourceId })
         assertEquals(listOf("before", "after"), savedProducts.map { it.sourceId })
         assertEquals(listOf("before", "after"), markedSoldOut.map { it.sourceId })
-        assertSame(report, savedReport)
+        assertEquals(1, report.failures.size)
+        assertEquals(ProductSource.ASETALO, report.failures.single().source)
+        assertEquals("failed", report.failures.single().sourceId)
+        assertEquals("Scrape failed", report.failures.single().errorMessage)
+        assertEquals(report.copy(failures = emptyList()), savedReport)
+        assertTrue(savedReport!!.failures.isEmpty())
         assertEquals(listOf(1, 1), report.stores.map { it.newProducts.size })
     }
 }

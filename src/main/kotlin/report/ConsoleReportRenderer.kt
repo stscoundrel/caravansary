@@ -12,6 +12,20 @@ class ConsoleReportRenderer {
         report.stores.forEach { store ->
             renderStore(store)
         }
+
+        report.failures.forEach { failure ->
+            println()
+            println("-".repeat(60))
+            println(failure.source.displayName)
+            println("  ${failure.sourceId}")
+            println("  FAILED: ${failure.errorMessage}")
+        }
+
+        println()
+        println(
+            "Completed: ${report.stores.size} categories succeeded, " +
+                    "${report.failures.size} failed"
+        )
     }
 
     private fun renderStore(result: ProductStoreReport) {

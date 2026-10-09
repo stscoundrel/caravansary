@@ -4,5 +4,6 @@ import java.time.LocalDateTime
 
 data class ProductReport(
     val generatedAt: LocalDateTime,
-    val stores: List<ProductStoreReport>
+    val stores: List<ProductStoreReport>,
+    val failures: List<ProductScrapeFailure> = emptyList()
 )
