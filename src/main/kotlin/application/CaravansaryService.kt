@@ -13,8 +13,19 @@ class CaravansaryService(
 ) {
 
     fun run(): ProductReport {
-        val results = fetchers.map { fetcher ->
-            fetcher to tracker.run(fetcher)
+        val results = fetchers.mapNotNull { fetcher ->
+            try {
+                fetcher to tracker.run(fetcher)
+            } catch (exception: InterruptedException) {
+                Thread.currentThread().interrupt()
+                throw exception
+            } catch (exception: Exception) {
+                System.err.println(
+                    "Failed to track ${fetcher.source.displayName} " +
+                            "(${fetcher.sourceId}): ${exception.message}"
+                )
+                null
+            }
         }
 
         val report = reportService.create(results)
