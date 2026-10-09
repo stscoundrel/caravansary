@@ -1,10 +1,10 @@
 package io.github.stscoundrel.caravansary.scraper.aawee
 
-import com.microsoft.playwright.Browser
 import com.microsoft.playwright.Locator
 import com.microsoft.playwright.Playwright
 import io.github.stscoundrel.caravansary.domain.Product
 import io.github.stscoundrel.caravansary.domain.ProductFetcher
+import io.github.stscoundrel.caravansary.scraper.ScraperConfig
 import io.github.stscoundrel.caravansary.domain.ProductSource
 import java.math.BigDecimal
 
@@ -23,16 +23,7 @@ class AaweeScraper(
 
         Playwright.create().use { playwright ->
             playwright.chromium().launch().use { browser ->
-                val context = browser.newContext(
-                    Browser.NewContextOptions()
-                        .setUserAgent(
-                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-                                    "AppleWebKit/537.36 (KHTML, like Gecko) " +
-                                    "Chrome/139.0.0.0 Safari/537.36"
-                        )
-                )
-
-                val page = context.newPage()
+                val page = browser.newPage(ScraperConfig.pageOptions())
                 page.navigate(url)
 
                 page.locator(".ProductList").waitFor()

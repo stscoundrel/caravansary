@@ -4,6 +4,7 @@ import com.microsoft.playwright.Playwright
 
 import io.github.stscoundrel.caravansary.domain.Product
 import io.github.stscoundrel.caravansary.domain.ProductFetcher
+import io.github.stscoundrel.caravansary.scraper.ScraperConfig
 import io.github.stscoundrel.caravansary.domain.ProductSource
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -20,7 +21,7 @@ class AsetaloScraper(override val sourceId: String) : ProductFetcher {
 
         Playwright.create().use { playwright ->
             playwright.chromium().launch().use { browser ->
-                val page = browser.newPage()
+                val page = browser.newPage(ScraperConfig.pageOptions())
 
                 page.navigate(url)
 
